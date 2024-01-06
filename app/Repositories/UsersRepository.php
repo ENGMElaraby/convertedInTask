@@ -23,7 +23,7 @@ readonly class UsersRepository
      */
     public function getTop10UsersWithTasks(): Collection
     {
-        return TaskModel::select('assigned_to_id', DB::raw('count(*) as total'))
+        return TaskModel::select('assigned_to_id', DB::raw(value: 'count(*) as total'))
             ->with('getUser')
             ->groupBy('assigned_to_id')
             ->orderByDesc('total')
@@ -37,6 +37,6 @@ readonly class UsersRepository
      */
     public function searchForUsersByName(string $name): mixed
     {
-        return $this->userModel::select(['id', 'name'])->where('name', 'like', "%$name%")->take(100)->get();
+        return $this->userModel::select(columns: ['id', 'name'])->where(column: 'name', operator: 'like', value: "%$name%")->take(value: 100)->get();
     }
 }
