@@ -31,8 +31,5 @@ jobs:
       - name: Run PHPUnit Tests
         run: vendor/bin/phpunit
 
-      - name: Run Background Job for Updating Statistics Table
-        run: php artisan update:statistics
-
       - name: Run Queue Worker
         run: php artisan queue:work --stop-when-empty
