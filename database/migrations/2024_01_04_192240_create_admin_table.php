@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 use Illuminate\{Database\Migrations\Migration, Database\Schema\Blueprint, Support\Facades\Schema};
 
@@ -9,10 +8,13 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('statistics', static function (Blueprint $table) {
+        Schema::create(table: 'admins', callback: static function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger(column: 'user_id');
-            $table->integer(column: 'task_count')->default(0);
+            $table->string(column: 'name');
+            $table->string(column: 'email')->unique();
+            $table->timestamp(column: 'email_verified_at')->nullable();
+            $table->string(column: 'password');
+            $table->rememberToken();
             $table->timestamps();
         });
     }
@@ -22,6 +24,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('statistics');
+        Schema::dropIfExists(table: 'tasks');
     }
 };

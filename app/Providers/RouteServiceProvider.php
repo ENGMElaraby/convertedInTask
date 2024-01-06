@@ -33,7 +33,7 @@ class RouteServiceProvider extends ServiceProvider
     protected string $userNamespace = 'App\\Http\\Controllers\\User';
 
     /**
-     * Define your route model bindings, pattern filters, and other route configuration.
+     * Define your route userModel bindings, pattern filters, and other route configuration.
      */
     public function boot(): void
     {

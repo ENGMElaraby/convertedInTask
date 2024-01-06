@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
-use Illuminate\{Database\Seeder, Support\Facades\DB};
+use App\{Models\AdminModel, Models\UserModel};
+use Illuminate\{Database\Seeder, Support\Facades\Hash, Support\Str};
 
 class UserSeeder extends Seeder
 {
@@ -12,12 +12,14 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('users')->insert(
-            values: factory(User::class, 10000)->create()
-        );
-
-        DB::table('users')->insert(
-            values: factory(User::class, 100)->state('admin')->create()
-        );
+        UserModel::factory()->count(count: 10000)->create();
+        (new AdminModel(attributes: [
+            'name' => 'ConvertedIn',
+            'email' => 'admin@convertedin.com',
+            'email_verified_at' => now(),
+            'password' => Hash::make(value: 'password'),
+            'remember_token' => Str::random(length: 10),
+        ]))->save();
+        AdminModel::factory()->count(count: 100)->create();
     }
 }

@@ -2,26 +2,23 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use App\Models\Task;
-use App\Models\User;
 use App\Repositories\UsersRepository;
-use Illuminate\{Contracts\Foundation\Application, Contracts\View\Factory, Contracts\View\View, Support\Facades\DB};
+use Illuminate\{Contracts\Foundation\Application, Contracts\View\Factory, Contracts\View\View};
 
-class DashboardController extends Controller
+readonly class DashboardController
 {
-
-    public function __construct(private UsersRepository $repository)
-    {
-    }
+    /**
+     * @param UsersRepository $usersRepository
+     */
+    public function __construct(private UsersRepository $usersRepository) { }
 
     /**
      * @return Factory|View|Application
      */
     public function index(): Factory|View|Application
     {
-        $users = $this->repository->getTop10UsersWithTasks();
-        return view('admin.dashboard', compact('users'));
+        $users = $this->usersRepository->getTop10UsersWithTasks();
+        return view(view: 'admin.dashboard', data: compact(var_name: 'users'));
     }
 
 }

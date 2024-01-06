@@ -2,14 +2,13 @@
 
 namespace Database\Factories;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
+use App\Models\UserModel;
+use Illuminate\{Database\Eloquent\Factories\Factory, Support\Facades\Hash, Support\Str};
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\UserModel>
+ * @extends Factory<UserModel>
  */
-class UserFactory extends Factory
+class AdminFactory extends Factory
 {
     /**
      * The current password being used by the factory.
@@ -37,7 +36,7 @@ class UserFactory extends Factory
      */
     public function unverified(): static
     {
-        return $this->state(fn (array $attributes) => [
+        return $this->state(fn(array $attributes) => [
             'email_verified_at' => null,
         ]);
     }

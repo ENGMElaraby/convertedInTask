@@ -1,4 +1,4 @@
-@php use App\Models\Admin; @endphp
+@php use App\Models\AdminModel; @endphp
 @extends('admin.layouts.master')
 @push('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('plugins/bootstrap-select/bootstrap-select.min.css') }}">
@@ -33,6 +33,7 @@
                     processResults: function (data) {
                         return {
                             results: $.map(data.data, function (item) {
+                                console.log(item)
                                 return {
                                     text: item.name,
                                     id: item.id
@@ -68,7 +69,7 @@
                                     <div class="col-md-3 mb-5">
                                         <label for="assigned_by_id">Admins</label>
                                         <select class="form-control" name="assigned_by_id" id="assigned_by_id" required>
-                                            @foreach(Admin::all() as $admin)
+                                            @foreach(AdminModel::all() as $admin)
                                                 <option value="{{ $admin->id }}">{{ $admin->name }}</option>
                                             @endforeach
                                         </select>

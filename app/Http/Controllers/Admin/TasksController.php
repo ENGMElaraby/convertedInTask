@@ -2,47 +2,66 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\{Http\Requests\Admin\Tasks\StoreRequest, Http\Resources\TasksResource, Repositories\TasksRepository};
-use JetBrains\PhpStorm\Pure;
-use MElaraby\Emerald\Controllers\CrudControllerController;
-use MElaraby\Emerald\HttpFoundation\Response;
+use App\{Http\Requests\Admin\Tasks\StoreRequest, Http\Resources\TasksResource, Repositories\TasksRepository,};
+use Illuminate\{Contracts\Foundation\Application,
+    Contracts\View\Factory,
+    Contracts\View\View,
+    Http\JsonResponse,
+    Http\RedirectResponse};
 
-class TasksController extends CrudControllerController
+readonly class TasksController
 {
-    protected ?string $storeRequest = StoreRequest::class;
-    protected ?string $route = 'admin.task.';
-    protected ?string $view = 'admin.modules.tasks.';
-    protected bool $pagination = true;
-    protected int $perPage = 10;
+    /**
+     * @param TasksRepository $tasksRepository
+     */
+    public function __construct(private TasksRepository $tasksRepository) { }
 
     /**
-     * UsersController constructor.
-     * @param TasksRepository $repository
+     * Display a listing of the resource.
+     *
      */
-    #[Pure]
-    public function __construct(TasksRepository $repository)
+    public function indexData(): JsonResponse
     {
-        parent::__construct($repository);
+        [$data, $totalRecords] = $this->tasksRepository->index(perPage: 10);
+        return response()->json([
+            'raw' => 1,
+            'recordsTotal' => $totalRecords,
+            'recordsFiltered' => 10,
+            'data' => TasksResource::collection(resource: $data)
+        ]);
     }
 
     /**
      * Display a listing of the resource.
      *
-     * @return Response
+     * @return Application|Factory|View|\Illuminate\Foundation\Application
      */
-    public function index(): Response
+    public function index(): \Illuminate\Foundation\Application|View|Factory|Application
     {
-        [$data, $totalRecords] = $this->repository->index($this->pagination, $this->perPage);
-        return new Response(
-            data: [
-                'raw' => 1,
-                'recordsTotal' => $totalRecords,
-                'recordsFiltered' => $this->perPage,
-                'data' => TasksResource::collection($data)
-            ],
-            view: $this->indexView()
-        );
+        return view(view: 'admin.modules.tasks.index');
     }
 
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return Application|Factory|View|\Illuminate\Foundation\Application
+     */
+    public function create(): \Illuminate\Foundation\Application|View|Factory|Application
+    {
+        return view(view: 'admin.modules.tasks.store');
+    }
 
+    /**
+     * @param StoreRequest $storeRequest
+     * @return RedirectResponse
+     */
+    public function store(StoreRequest $storeRequest): RedirectResponse
+    {
+        $model = $this->tasksRepository->store(data: $storeRequest->validated());
+        return redirect()
+            ->route(route: 'admin.task.index')
+            ->with(key: 'data', value: $model)
+            ->with(key: 'alert', value: ['type' => 'success', 'html' => 'Tasks Added successfully']);
+
+    }
 }

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\{Models\Statistics, Models\Task};
+use App\{Models\Statistics, Models\TaskModel};
 use Illuminate\Http\Request;
 
 class TaskController extends Controller
@@ -24,7 +24,7 @@ class TaskController extends Controller
             'user_id' => 'required|exists:users,id,is_admin,0',
         ]);
 
-        $task = Task::create([
+        $task = TaskModel::create([
             'title' => $validatedData['title'],
             'description' => $validatedData['description'],
             'assigned_to_id' => $validatedData['user_id'],
@@ -40,7 +40,7 @@ class TaskController extends Controller
 
     public function taskList()
     {
-        $tasks = Task::paginate(10);
+        $tasks = TaskModel::paginate(10);
         return view('task-list', compact('tasks'));
     }
 

@@ -2,8 +2,7 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Artisan;
+use Illuminate\{Console\Command, Support\Facades\Artisan};
 
 class StartApp extends Command
 {
@@ -24,21 +23,19 @@ class StartApp extends Command
     /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(): void
     {
-        // Clear config and cache
-        Artisan::call('config:clear');
-        Artisan::call('cache:clear');
+        $this->info(string: 'Docker finished...');
+        $this->info(string: 'Clear & optimize...');
+        Artisan::call(command: 'config:clear');
+        Artisan::call(command: 'cache:clear');
+        Artisan::call(command: 'optimize:clear');
 
-        // Migrate database
-        Artisan::call('migrate');
+        $this->info(string: 'Migrate Database & Seed...');
+        Artisan::call(command: 'migrate');
+        Artisan::call(command: 'db:seed --class=UserSeeder');
 
-        // Seed database
-        Artisan::call('db:seed --class=UserSeeder');
-
-        // Run the application
-        $this->info('Starting the application...');
-        Artisan::call('serve');
+        $this->info(string: 'Starting the application...');
     }
 
 }

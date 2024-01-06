@@ -3,31 +3,27 @@
 namespace App\Http\Controllers\Admin;
 
 use App\{Http\Controllers\Controller, Repositories\UsersRepository};
-use Illuminate\Http\Request;
+use Illuminate\{Http\JsonResponse, Http\Request};
 use JetBrains\PhpStorm\Pure;
-use MElaraby\Emerald\HttpFoundation\Response;
 
 class UsersController extends Controller
 {
     /**
      * UsersController constructor.
-     * @param UsersRepository $repository
+     * @param UsersRepository $userRepository
      */
     #[Pure]
-    public function __construct(private UsersRepository $repository)
+    public function __construct(private readonly UsersRepository $userRepository)
     {
     }
 
     /**
      * @param Request $request
-     * @return Response
+     * @return JsonResponse
      */
-    public function searchForUsers(Request $request): Response
+    public function searchForUsers(Request $request): JsonResponse
     {
-        $input = $request->input;
-        return new Response(
-            data: $this->repository->where('name', "%$input%", 'like')->take(100)->get(),
-        );
+        return response()->json(data: ['data' => $this->userRepository->searchForUsersByName(name: $request->input)]);
     }
 
 

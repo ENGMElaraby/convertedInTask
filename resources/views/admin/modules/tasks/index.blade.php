@@ -34,8 +34,8 @@
                 "processing": true,
                 "serverSide": true,
                 "ajax": {
-                    url: '{{ route('admin.task.index') }}',
-                    dataSrc: 'data.data'
+                    url: '{{ route('admin.task.index.data') }}',
+                    dataSrc: 'data'
                 },
                 "columns": [
                     {data: 'title'},
